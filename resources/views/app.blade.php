@@ -4,12 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Laravel - Vue</title>
-
-    @vite('resources/css/app.css')
+    @routes
+    @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
+    @inertiaHead
 </head>
-<body class="antialiased">
-<div id="app"></div>
-@vite('resources/js/app.js')
+<body class="font-sans antialiased">
+@if(auth()->check())
+    <script>window.Laravel = { csrfToken: '{{ csrf_token() }}', user: @json(auth()->user()) };</script>
+@endif
+@inertia
 </body>
 </html>
