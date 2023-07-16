@@ -1,7 +1,7 @@
 <template>
     <div
         v-if="isHomePage || isLoginPage || isRegisterPage"
-        class="sm:fixed sm:top-0 sm:right-0 p-6 text-right z-10 bg-gray-200 w-full"
+        class="p-6 text-right z-10 bg-gray-200 w-full"
     >
         <Link
             v-if="user"
