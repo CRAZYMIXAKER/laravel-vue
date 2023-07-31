@@ -7,7 +7,8 @@
     <title>Laravel</title>
 </head>
 <body id="app">
-{{--<script>window.Laravel = { csrfToken: '{{ csrf_token() }}', user: @json($user) };</script>--}}
+<script>window.Laravel = { csrfToken: '{{ csrf_token() }}', user: @json($user) };</script>
+{{--@dd($user)--}}
 @vite(['resources/js/app.js'])
 </body>
 </html>

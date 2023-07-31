@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,10 +25,9 @@ use Illuminate\Support\Facades\Route;
 //    return ['Laravel' => app()->version()];
 //});
 
-Route::any('{all}', function () {
-    //    $user = Auth::user();
-    //    return view('vue')->with(compact('user'));
-    return view('vue');
-})->where(['all' => '.*']);
-
 require __DIR__.'/auth.php';
+
+Route::any('{all}', function () {
+    $user = Auth::user();
+    return view('vue')->with(compact('user'));
+})->where(['all' => '.*']);
