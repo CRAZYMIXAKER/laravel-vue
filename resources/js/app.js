@@ -8,7 +8,9 @@ import router from './router/index';
 
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.common['X-CSRF-TOKEN'] = window.Laravel.csrfToken;
+
 console.log(window.Laravel.user);
+
 const app = createApp(App);
 app.use(router);
 app.use(VueAxios, axios);

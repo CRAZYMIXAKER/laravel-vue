@@ -1,47 +1,91 @@
-<!--<x-guest-layout>-->
-<!--    &lt;!&ndash; Session Status &ndash;&gt;-->
-<!--    <x-auth-session-status class="mb-4" :status="session('status')" />-->
+<template>
+    <div>
+        <h1>Login</h1>
+        <!-- Session Status -->
+        <!--            <x-auth-session-status class="mb-4" :status="session('status')" />-->
 
-<!--    <form method="POST" action="{{ route('login') }}">-->
-<!--        @csrf-->
+        <form method="POST">
+            <!-- Email Address -->
+            <div>
+                <label for="email">Email</label>
+                <input
+                    id="email"
+                    v-model="form.email"
+                    autocomplete="username"
+                    autofocus
+                    class="block mt-1 w-full"
+                    required
+                    type="email"/>
+                <label v-if="form.errors.email" class="mt-2">{{ form.errors.email[0] }}</label>
+            </div>
 
-<!--        &lt;!&ndash; Email Address &ndash;&gt;-->
-<!--        <div>-->
-<!--            <x-input-label for="email" :value="__('Email')" />-->
-<!--            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />-->
-<!--            <x-input-error :messages="$errors->get('email')" class="mt-2" />-->
-<!--        </div>-->
+            <!-- Password -->
+            <div class="mt-4">
+                <label for="password">Password</label>
 
-<!--        &lt;!&ndash; Password &ndash;&gt;-->
-<!--        <div class="mt-4">-->
-<!--            <x-input-label for="password" :value="__('Password')" />-->
+                <input
+                    id="password"
+                    v-model="form.password"
+                    autocomplete="current-password"
+                    class="block mt-1 w-full"
+                    required
+                    type="password"/>
+                <label v-if="form.errors.password" class="mt-2">{{ form.errors.password[0] }}</label>
+            </div>
 
-<!--            <x-text-input id="password" class="block mt-1 w-full"-->
-<!--                            type="password"-->
-<!--                            name="password"-->
-<!--                            required autocomplete="current-password" />-->
+            <!-- Remember Me -->
+            <div class="block mt-4">
+                <label class="inline-flex items-center" for="remember_me">
+                    <input
+                        id="remember_me"
+                        v-model="form.remember"
+                        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
+                        type="checkbox">
+                    <span class="ml-2 text-sm text-gray-600">Remember me</span>
+                </label>
+            </div>
 
-<!--            <x-input-error :messages="$errors->get('password')" class="mt-2" />-->
-<!--        </div>-->
+            <div class="flex items-center justify-end mt-4">
+                <!--                            @if (Route::has('password.request'))-->
+                <router-link
+                    :to="{name: 'password.request'}"
+                    class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Forgot your password?
+                </router-link>
+                <!--                            @endif-->
 
-<!--        &lt;!&ndash; Remember Me &ndash;&gt;-->
-<!--        <div class="block mt-4">-->
-<!--            <label for="remember_me" class="inline-flex items-center">-->
-<!--                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">-->
-<!--                <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>-->
-<!--            </label>-->
-<!--        </div>-->
+                <button class="ml-3" @click.prevent="loginUser">Log in</button>
+            </div>
+        </form>
+    </div>
+</template>
 
-<!--        <div class="flex items-center justify-end mt-4">-->
-<!--            @if (Route::has('password.request'))-->
-<!--                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">-->
-<!--                    {{ __('Forgot your password?') }}-->
-<!--                </a>-->
-<!--            @endif-->
-
-<!--            <x-primary-button class="ml-3">-->
-<!--                {{ __('Log in') }}-->
-<!--            </x-primary-button>-->
-<!--        </div>-->
-<!--    </form>-->
-<!--</x-guest-layout>-->
+<script>
+export default {
+    data() {
+        return {
+            form: {
+                errors: [],
+                email: '',
+                password: '',
+                remember: false,
+            },
+        };
+    },
+    methods: {
+        async loginUser() {
+            await axios.post('/login', {
+                email: this.form.email,
+                password: this.form.password,
+                remember: this.form.remember,
+            }).then(res => {
+                console.log(res);
+                this.$router.push({ name: 'home' });
+            }).catch(error => {
+                this.form.errors = error.response.data.errors;
+                console.log(error.response.data.errors);
+            });
+        },
+    },
+};
+</script>

@@ -35,27 +35,36 @@ const checkRole = (allowedRoles = ['user', 'admin', 'super-admin', 'premium', 'v
 
 const routes = [
     {
-        path: '/login',
-        name: 'login',
-        component: Login,
-        beforeEnter: isAuth,
-    },
-    {
-        path: '/register',
-        name: 'register',
-        component: Register,
-        beforeEnter: isAuth,
-    },
-    {
-        path: '/forgot-password/',
-        name: 'forgot-password',
-        component: ForgotPassword,
-        beforeEnter: isAuth,
-    },
-    {
         path: '/',
         component: MainLayout,
         children: [
+            {
+                path: 'login',
+                name: 'login',
+                components: {
+                    default: Login,
+                    menu: SidebarDefault,
+                },
+                beforeEnter: isAuth,
+            },
+            {
+                path: 'register',
+                name: 'register',
+                components: {
+                    default: Register,
+                    menu: SidebarDefault,
+                },
+                beforeEnter: isAuth,
+            },
+            {
+                path: 'forgot-password/',
+                name: 'password.request',
+                components: {
+                    default: ForgotPassword,
+                    menu: SidebarDefault,
+                },
+                beforeEnter: isAuth,
+            },
             {
                 path: '',
                 name: 'home',

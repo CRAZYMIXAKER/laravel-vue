@@ -1,25 +1,55 @@
-<!--<x-guest-layout>-->
-<!--    <div class="mb-4 text-sm text-gray-600">-->
-<!--        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}-->
-<!--    </div>-->
+<template>
+    <div>
+        <div class="mb-4 text-sm text-gray-600">
+            Forgot your password? No problem. Just let us know your email address and we will email you a password reset
+            link that will allow you to choose a new one.
+        </div>
 
-<!--    &lt;!&ndash; Session Status &ndash;&gt;-->
-<!--    <x-auth-session-status class="mb-4" :status="session('status')" />-->
+        <!--         Session Status -->
+        <!--        <x-auth-session-status class="mb-4" :status="session('status')"/>-->
 
-<!--    <form method="POST" action="{{ route('password.email') }}">-->
-<!--        @csrf-->
+        <form method="POST">
+            <!-- Email Address -->
+            <div>
+                <label for="email">Email</label>
+                <input
+                    id="email"
+                    v-model="form.email"
+                    autofocus
+                    class="block mt-1 w-full"
+                    required
+                    type="email"/>
+                <label v-if="form.errors.email" class="mt-2">{{ form.errors.email[0] }}</label>
+            </div>
 
-<!--        &lt;!&ndash; Email Address &ndash;&gt;-->
-<!--        <div>-->
-<!--            <x-input-label for="email" :value="__('Email')" />-->
-<!--            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />-->
-<!--            <x-input-error :messages="$errors->get('email')" class="mt-2" />-->
-<!--        </div>-->
+            <div class="flex items-center justify-end mt-4">
+                <button @click.prevent="forgotPassword">Email Password Reset Link</button>
+            </div>
+        </form>
+    </div>
+</template>
 
-<!--        <div class="flex items-center justify-end mt-4">-->
-<!--            <x-primary-button>-->
-<!--                {{ __('Email Password Reset Link') }}-->
-<!--            </x-primary-button>-->
-<!--        </div>-->
-<!--    </form>-->
-<!--</x-guest-layout>-->
+<script>
+export default {
+    data() {
+        return {
+            form: {
+                errors: [],
+                email: '',
+            },
+        };
+    },
+    methods: {
+        async forgotPassword() {
+            await axios.post('/forgot-password', {
+                email: this.form.email,
+            }).then(res => {
+                console.log(res);
+            }).catch(error => {
+                this.form.errors = error.response.data.errors;
+                console.log(error.response.data.errors);
+            });
+        },
+    },
+};
+</script>
